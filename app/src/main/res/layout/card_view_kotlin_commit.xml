@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content" android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tv_commit_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Commit Title" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/iv_author_image"
+            android:contentDescription="Author Image"
+            />
+
+        <TextView
+            android:id="@+id/tv_author_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Authors Name" />
+
+        <TextView
+            android:id="@+id/tv_commit_time_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Commit Date and Time"
+            />
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
