@@ -22,11 +22,6 @@ import javax.inject.Inject
 class KotlinCommitFragment : Fragment() {
 
 
-
-    companion object {
-        fun newInstance() = KotlinCommitFragment()
-    }
-
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
@@ -52,16 +47,48 @@ class KotlinCommitFragment : Fragment() {
 
         viewModel.getKotlinCommits()
 
-        viewModel.observeKkotlinCommit()
+        setUpLiveData()
+
+        btnRetry.setOnClickListener {
+            viewModel.getKotlinCommits()
+        }
+
+
+    }
+
+    private fun setUpLiveData(){
+        viewModel.observeKotlinCommit()
             .observe(this, object : Observer<List<KotlinCommitModel>>{
                 override fun onChanged(t: List<KotlinCommitModel>) {
-                    var adapter = KotlinCommitAdapter(t)
-                    var layoutManager = LinearLayoutManager(activity!!.applicationContext)
+                    val adapter = KotlinCommitAdapter(t)
+                    val layoutManager = LinearLayoutManager(activity!!.applicationContext)
                     rv_kotlin_commit.layoutManager = layoutManager
                     rv_kotlin_commit.adapter = adapter
+                    MessageContainer.visibility = View.GONE
                 }
 
             })
+
+        viewModel.observeProgress().observe(this,object :Observer<Boolean> {
+            override fun onChanged(t: Boolean?) {
+                if (t == true){
+                    pb_loading.visibility = View.VISIBLE
+                }else{
+                    pb_loading.visibility = View.GONE
+                }
+            }
+        })
+
+
+        viewModel.observeError().observe(this, object: Observer<Boolean>{
+            override fun onChanged(t: Boolean?) {
+                if (t == true){
+                    MessageContainer.visibility = View.VISIBLE
+                }else{
+                    MessageContainer.visibility = View.GONE
+                }
+            }
+        })
     }
 
 }

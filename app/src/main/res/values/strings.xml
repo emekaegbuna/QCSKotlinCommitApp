@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">QCSProject</string>
+    <string name="retry">Retry</string>
+    <string name="error_message">Something went wrong</string>
+    <string name="commit_title">Commit Title</string>
+    <string name="author_image">Author Image</string>
+    <string name="authors_name">Authors Name</string>
+    <string name="commit_date_and_time">Commit Date and Time</string>
 </resources>

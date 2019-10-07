@@ -14,39 +14,35 @@ import javax.inject.Inject
 
 class KotlinCommitViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
 
-    //lateinit var repository: RepositoryImpl
-    lateinit var compositeDisposable: CompositeDisposable
-    var liveKotlinCommit: MutableLiveData<List<KotlinCommitModel>> = MutableLiveData()
-    var liveError: MutableLiveData<Boolean> = MutableLiveData()
-    var liveProgress: MutableLiveData<Boolean> = MutableLiveData()
+    private var compositeDisposable = CompositeDisposable()
+    private var liveKotlinCommit: MutableLiveData<List<KotlinCommitModel>> = MutableLiveData()
+    private var liveError: MutableLiveData<Boolean> = MutableLiveData()
+    private var liveProgress: MutableLiveData<Boolean> = MutableLiveData()
 
     fun getKotlinCommits(){
 
-        liveProgress.value = true
 
-        //repository = RepositoryImpl(RetrofitInterface)
-        compositeDisposable = CompositeDisposable()
 
         compositeDisposable.add(
         repository
             .getKotlinCommit()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({t -> setKotlinCommit(t) }, {error -> handleError(error.message!!)}))
+            .doOnSubscribe {liveProgress.value = true}
+            .subscribe({commits -> setKotlinCommit(commits)
+            liveProgress.value = false}, {error -> handleError(error.message!!)
+            liveProgress.value = false}))
     }
 
-    fun setKotlinCommit(kotlinCommitModel: List<KotlinCommitModel>){
+    private fun setKotlinCommit(kotlinCommitModel: List<KotlinCommitModel>){
 
         liveProgress.value = false
         liveKotlinCommit.value = kotlinCommitModel
     }
 
-    fun observeKkotlinCommit(): MutableLiveData<List<KotlinCommitModel>>{
+    fun observeKotlinCommit(): MutableLiveData<List<KotlinCommitModel>>{
         return liveKotlinCommit
     }
 
-    fun handleError(error: String){
-        Log.d("TAG_ViewModel", error)
+    private fun handleError(error: String){
         liveError.value = true
     }
 
